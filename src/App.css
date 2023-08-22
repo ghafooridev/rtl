@@ -1,6 +1,7 @@
 .container {
   padding: 10px;
   width: 50%;
+  max-width: 500px;
   margin: 100px auto;
   border: 1px #a0a0a0 solid;
 }
@@ -22,19 +23,37 @@
   width: 100%;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
+}
+.content button:disabled,
+.content button[disabled] {
+  background-color: #a0a0a0;
+  pointer-events: none;
 }
 .error {
   margin-left: 10px;
   color: #f00;
 }
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width: 300px;
-  margin: auto;
+  margin: 20px auto;
   text-align: center;
+  padding: 10px;
+}
+.description {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 img {
-  width: 100%;
+  width: 100px;
 }
 .price {
   color: grey;
@@ -44,13 +63,14 @@ img {
 .card button {
   border: none;
   outline: 0;
-  padding: 12px;
+  padding: 10px;
   color: white;
   background-color: #000;
   text-align: center;
   cursor: pointer;
   width: 100%;
   font-size: 18px;
+  margin: 10px 0;
 }
 
 .card button:hover {
@@ -66,4 +86,11 @@ img {
 
 .selected {
   background-color: deepskyblue !important;
+}
+
+.list {
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
