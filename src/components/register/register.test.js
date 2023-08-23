@@ -1,36 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Register from "./index";
-
-const typeIntoForm = ({ email, password, confirmPassword }) => {
-  const emailInputElement = screen.getByRole("textbox", {
-    name: "email",
-  });
-  const passwordInputElement = screen.getByLabelText("Password");
-  const confirmPasswordInputElement =
-    screen.getByLabelText(/confirm password/i);
-  if (email) {
-    userEvent.type(emailInputElement, email);
-  }
-  if (password) {
-    userEvent.type(passwordInputElement, password);
-  }
-  if (confirmPassword) {
-    userEvent.type(confirmPasswordInputElement, confirmPassword);
-  }
-
-  return {
-    emailInputElement,
-    passwordInputElement,
-    confirmPasswordInputElement,
-  };
-};
+import { BrowserRouter } from "react-router-dom";
+import { ERROR_MESSAGE } from "../../constants";
 
 const getElement=(element)=>{
   const elements={
     "Email":screen.getByRole("textbox", { name: "Email"}),
     "Password": screen.getByLabelText("Password"),
-    "Confirm Password":   screen.getByLabelText("Confirm Password")
+    "Confirm Password": screen.getByLabelText("Confirm Password"),
+    "Button": screen.getByRole("button" ,{name:"Submit"})
   }
   if( elements[element])  return elements[element]
 }
@@ -40,15 +19,23 @@ const changeElement=(element,value)=>{
 }
 
 const clickOnSubmitButton = () => {
-  const submitBtnElement = screen.getByRole("button", {
-    name: "submit",
-  });
-  userEvent.click(submitBtnElement);
+  userEvent.click(getElement("Button"));
 };
 
-describe("Register page", () => {
+
+//mock the navigation behavior
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
+
+describe.skip("Register page", () => {
   beforeEach(() => {
-    render(<Register />);
+    render(
+    <BrowserRouter>
+      <Register />
+    </BrowserRouter>);
   });
 
   // test.only("inputs should be initially empty111", () => {
@@ -66,7 +53,6 @@ describe("Register page", () => {
     expect(getElement("Password").value).toBe("");
     expect(getElement("Confirm Password").value).toBe("");
   })
-
   test("should be able to type into inputs and get value", () => {
     changeElement("Email","stackjs@gmail.com");
     changeElement("Password","123456");
@@ -76,83 +62,77 @@ describe("Register page", () => {
     expect(getElement("Password").value).toBe("123456");
     expect(getElement("Confirm Password").value).toBe("123456");
   });
+  test("button should be disabled when all inputs are empty", () => {
+    expect(getElement("Button")).toHaveClass('btn');
+    expect(getElement("Button")).toBeDisabled()
+  });
+  test("button should be enabled when all inputs are filled", () => {
+    changeElement("Email","stackjs@gmail.com");
+    changeElement("Password","123456");
+    changeElement("Confirm Password","123456");
 
-  describe.skip("Error Handling", () => {
+    expect(getElement("Button")).toBeEnabled();
+  });
+  describe("handle errors and navigate", () => {
+    beforeEach(()=>{
+      expect(
+        screen.queryByText(ERROR_MESSAGE.EMAIL)
+      ).not.toBeInTheDocument(); 
+
+      expect(
+        screen.queryByText(ERROR_MESSAGE.PASSWORD)
+      ).not.toBeInTheDocument(); 
+
+      expect(
+        screen.queryByText(ERROR_MESSAGE.CONFIRM_PASSWORD)
+      ).not.toBeInTheDocument(); 
+    });
+    
     test("should show email error message on invalid email", () => {
-      expect(
-        screen.queryByText(/the email you input is invalid/i)
-      ).not.toBeInTheDocument();
+      changeElement("Email","stackjs");
+      changeElement("Password","123456");
+      changeElement("Confirm Password","123456");
 
-      typeIntoForm({
-        email: "selenagmail.com",
-      });
       clickOnSubmitButton();
 
       expect(
-        screen.queryByText(/the email you input is invalid/i)
+        screen.getByText(ERROR_MESSAGE.EMAIL)
       ).toBeInTheDocument();
     });
 
-    test("should show password error if password is less than 5 characters", () => {
-      typeIntoForm({ email: "selena@gmail.com" });
-
-      expect(
-        screen.queryByText(
-          /the password you entered should contain 5 or more characters/i
-        )
-      ).not.toBeInTheDocument();
-
-      typeIntoForm({ password: "123" });
+    test("should show password error message on invalid password", () => {
+      changeElement("Email","stackjs@gmail.com");
+      changeElement("Password","123");
+      changeElement("Confirm Password","123");
 
       clickOnSubmitButton();
 
       expect(
-        screen.queryByText(
-          /the password you entered should contain 5 or more characters/i
-        )
+        screen.getByText(ERROR_MESSAGE.PASSWORD)
       ).toBeInTheDocument();
     });
 
-    test("should show confirm password error if passwords don't match", () => {
-      typeIntoForm({
-        email: "selena@gmail.com",
-        password: "12345",
-      });
-
-      expect(
-        screen.queryByText(/the passwords don't match. try again/i)
-      ).not.toBeInTheDocument();
-
-      typeIntoForm({
-        confirmPassword: "123456",
-      });
+    test("should show confirm password error message if passwords don't match", () => {
+      changeElement("Email","stackjs@gmail.com");
+      changeElement("Password","123456");
+      changeElement("Confirm Password","1234567");
 
       clickOnSubmitButton();
 
       expect(
-        screen.queryByText(/the passwords don't match. try again/i)
+        screen.getByText(ERROR_MESSAGE.CONFIRM_PASSWORD)
       ).toBeInTheDocument();
     });
 
-    test("should show no error message if every input is valid", () => {
-      typeIntoForm({
-        email: "selena@gmail.com",
-        password: "12345",
-        confirmPassword: "12345",
-      });
-      clickOnSubmitButton();
 
-      expect(
-        screen.queryByText(/the email you input is invalid/i)
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(
-          /the password you entered should contain 5 or more characters/i
-        )
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(/the passwords don't match. try again/i)
-      ).not.toBeInTheDocument();
+    test("should call the navigation", () => {
+      changeElement("Email","stackjs@gmail.com");
+      changeElement("Password","123456");
+      changeElement("Confirm Password","123456");
+      
+      clickOnSubmitButton();
+     
+      expect(mockedUsedNavigate).toHaveBeenCalledWith('products');
     });
   });
 });

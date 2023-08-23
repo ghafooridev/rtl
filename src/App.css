@@ -16,7 +16,7 @@
 .content label {
   margin-right: 10px;
 }
-.content button {
+.content .btn {
   border: none;
   background-color: deepskyblue;
   padding: 5px;
@@ -25,8 +25,8 @@
   font-weight: bold;
   cursor: pointer;
 }
-.content button:disabled,
-.content button[disabled] {
+.content .btn:disabled,
+.content .btn[disabled] {
   background-color: #a0a0a0;
   pointer-events: none;
 }
@@ -45,6 +45,7 @@
   text-align: center;
   padding: 10px;
 }
+
 .description {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -87,10 +88,27 @@ img {
 .selected {
   background-color: deepskyblue !important;
 }
+.productList {
+  display: flex;
+  flex-direction: column;
+}
+.productList .heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+}
 
-.list {
-  padding: 50px;
+.productList ul {
+  padding: 20px 50px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.productList li {
+  list-style: none;
+}
+.filter {
+  font-size: 16px;
 }

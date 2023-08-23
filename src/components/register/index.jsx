@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validator from "validator";
+import { ERROR_MESSAGE } from "../../constants";
 
 function Register() {
   const navigate = useNavigate();
@@ -21,13 +22,11 @@ function Register() {
 
   const onClickSubmit = () => {
     if (!validator.isEmail(registerInput.email)) {
-      return setError("The email you input is invalid.");
+      return setError(ERROR_MESSAGE.EMAIL);
     } else if (registerInput.password.length < 5) {
-      return setError(
-        "The password you entered should contain 5 or more characters."
-      );
+      return setError(ERROR_MESSAGE.PASSWORD);
     } else if (registerInput.password !== registerInput.confirmPassword) {
-      return setError("The passwords don't match. Try again.");
+      return setError(ERROR_MESSAGE.CONFIRM_PASSWORD);
     }
     navigate(`products`);
   };
@@ -70,12 +69,7 @@ function Register() {
       <div className="content">
         <button
           type="submit"
-          className={
-            (registerInput.email === "" ||
-              registerInput.password === "" ||
-              registerInput.confirmPassword === "") &&
-            "disabled"
-          }
+          className="btn"
           onClick={onClickSubmit}
           disabled={
             registerInput.email === "" ||

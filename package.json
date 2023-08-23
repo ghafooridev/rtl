@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "jest-html-reporters": "^3.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
@@ -17,6 +18,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test --watchAll ",
+    "test:coverage": "react-scripts test --coverage",
+    "test:report": "react-scripts test --env=jsdom --reporters=default --reporters=jest-html-reporters",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^29.5.4",
     "msw": "^1.2.3"
   }
 }

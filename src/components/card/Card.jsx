@@ -19,7 +19,7 @@ function Card(props) {
         <span>{rating.rate} &#9650;</span>
       </div>
 
-      <button className={selected && "selected"} onClick={onAdd}>
+      <button className={selected ? "selected" : ""} onClick={onAdd}>
         {selected ? "selected" : "Add to Cart"}
       </button>
     </div>
