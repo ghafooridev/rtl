@@ -2,34 +2,39 @@ import { useEffect, useState } from "react";
 import Card from "../card/Card";
 import Filter from "../filter";
 import { API_BASE_ADDRESS } from "../../constants";
+import { useFetch } from "../../hook/useFetch";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState();
-
-  const fetchProducts = (category) => {
-    const url = category ? `products/category/${category}` : "products";
-    fetch(`${API_BASE_ADDRESS}${url}`)
-      .then((res) => res.json())
-      .then((json) => setProducts(json));
-  };
+  const { data, loading } = useFetch(`${API_BASE_ADDRESS}/products`);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    setProducts(data);
+  }, [loading]);
 
   useEffect(() => {
-    fetchProducts(category);
+    let productsFiltered = [...products];
+
+    productsFiltered = productsFiltered.filter((item) => {
+      return item.category === category;
+    });
+    setFilteredProducts(productsFiltered);
   }, [category]);
 
-  return (
+  const allProducts = filteredProducts.length ? filteredProducts : products;
+
+  return loading ? (
+    <div>loading Products...</div>
+  ) : (
     <div className="productList">
       <div className="heading">
         <h1>Product list</h1>
         <Filter category={category} setCategory={setCategory} />
       </div>
       <ul>
-        {products.map((item) => {
+        {allProducts.map((item) => {
           return (
             <li key={item.id}>
               <Card {...item} />

@@ -1,38 +1,77 @@
-import {fireEvent, render,screen,waitFor} from "@testing-library/react";
+import {fireEvent, render,screen} from "@testing-library/react";
 import userEvent from '@testing-library/user-event'
-import Card from "./Card.jsx";
+import Card from "./Card";
 
 
-describe.skip("Card Component",()=>{
+describe("Card Component",()=>{
 
 
+const cardProps={
+  title:"product1" ,
+      price:"1000" ,
+      description:"description of product1" ,
+      image:"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" ,
+      rating:{rate:3.5}
+}
 
 
-it("should show name of Product...",async()=>{
+it("should show all card items property",async()=>{
   // Arrange
     const view =render(
-    <div>
-      <Card title="product1" price="1000" 
-      description="description of product1" 
-      img="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" count="120"/>
-   </div>)
+      <Card {...cardProps}
+    />
+   )
    
    
-//Act
+const image=screen.getByRole('img')
+expect(image).toBeInTheDocument()
+expect(image.src).toContain(cardProps.image)
+
+const title=screen.getByText(cardProps.title)
+expect(title).toBeInTheDocument()
+
+const price=screen.getByText(`$${cardProps.price}`)
+expect(price).toBeInTheDocument()
+
+const description=screen.getByText(cardProps.description)
+expect(description).toBeInTheDocument()
+
+const rate=screen.getByText(`${cardProps.rating.rate}`,{exact:false})
+expect(rate).toBeInTheDocument()
+
+
+// example of using view
+// expect(view.container.getElementsByClassName('price')[0]).toBeInTheDocument()
+
+  })
 
 
 
-//Asset
 
-expect(screen.getByRole('button',{name:'Add to Cart'})).toBeInTheDocument()
-expect(view.container.getElementsByClassName('price')[0]).toBeInTheDocument()
-expect(screen.getByText('coun',{selector:"span",exact:false})).toBeInTheDocument()
+it("should change the button text after selecting card",async()=>{
+  // Arrange
+    const view =render(
+      <Card {...cardProps}
+    />
+   )
 
-    fireEvent.click(view.getByRole('button',{name:'Add to Cart'}))
+   const button=screen.getByRole('button');
 
-    // await waitFor(() => {expect(screen.getByRole('button',{name:'selected'})).toBeInTheDocument()});
-    await expect(screen.getByRole('button',{name:'selected'})).toBeInTheDocument()
-   
+   expect(button).toHaveTextContent('Add to Cart')
+
+   userEvent.click(button)
+   expect(button).toHaveClass('selected')
+    expect(button).toHaveTextContent('selected')
+
+
+    userEvent.click(button)
+    expect(button).not.toHaveClass('selected')
+     expect(button).toHaveTextContent('Add to Cart')
+
 
   })
 })
+
+
+
+   

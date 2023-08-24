@@ -4,6 +4,7 @@
     "title": "product1",
     "price": 1000,
     "description": "description of product1",
+    "category": "men's clothing",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     "rating": { "rate": "2.0", "count": 120 }
   },
@@ -12,6 +13,7 @@
     "title": "product2",
     "price": 2000,
     "description": "description of product2",
+    "category": "jewelery",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     "rating": { "rate": "4.1", "count": 100 }
   },
@@ -20,6 +22,7 @@
     "title": "product3",
     "price": 1200,
     "description": "description of product3",
+    "category": "women's clothing",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     "rating": { "rate": "3.1", "count": 185 }
   },
@@ -28,6 +31,7 @@
     "title": "product4",
     "price": 1500,
     "description": "description of product4",
+    "category": "electronics",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     "rating": { "rate": "3.5", "count": 250 }
   },
@@ -36,6 +40,7 @@
     "title": "product5",
     "price": 1600,
     "description": "description of product5",
+    "category": "electronics",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     "rating": { "rate": "3.5", "count": 170 }
   }

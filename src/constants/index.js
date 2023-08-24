@@ -4,4 +4,5 @@ export const ERROR_MESSAGE={
   CONFIRM_PASSWORD:"Passwords don't match."
 }
 
-export const API_BASE_ADDRESS="https://fakestoreapi.com/"
+export const API_BASE_ADDRESS="https://fakestoreapi.com"
+

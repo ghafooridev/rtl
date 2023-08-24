@@ -1,4 +1,4 @@
-import {render,screen,within} from "@testing-library/react";
+import {render,screen,fireEvent, getByRole} from "@testing-library/react";
 import userEvent from '@testing-library/user-event'
 import {rest} from "msw";
 import  {setupServer} from "msw/node";
@@ -24,8 +24,8 @@ describe("Product Component",()=>{
 
 test("should show all products property",async()=>{
   // Arrange
+  expect(screen.getByText(/loading/i)).toBeInTheDocument()
   const list = await screen.findAllByRole("listitem");
- 
   expect(list.length).toBe(5);
    
 //Act
@@ -33,18 +33,30 @@ test("should show all products property",async()=>{
 
 
 //Asset
-// const items = screen.getAllByRole("list")
-// console.log(items)
-// expect(items.length).toBe(4)
-// expect(screen.getByRole('button',{name:'Add to Cart'})).toBeInTheDocument()
-// expect(view.container.getElementsByClassName('price')[0]).toBeInTheDocument()
-// expect(screen.getByText('coun',{selector:"span",exact:false})).toBeInTheDocument()
 
-//     fireEvent.click(view.getByRole('button',{name:'Add to Cart'}))
-
-//     // await waitFor(() => {expect(screen.getByRole('button',{name:'selected'})).toBeInTheDocument()});
-//     await expect(screen.getByRole('button',{name:'selected'})).toBeInTheDocument()
    
 
-  })
+  });
+  test("should filter for jewelery terms", async () => {
+     // Arrange
+    const list = await screen.findAllByRole("listitem");
+
+// Act
+   await fireEvent.change(screen.getByRole('combobox'), { target: { value: 'jewelery' } })
+    let options = screen.getAllByRole('option')
+    expect(options[0].selected).toBeFalsy();
+    expect(options[1].selected).toBeFalsy();
+    expect(options[2].selected).toBeTruthy();
+    expect(options[3].selected).toBeFalsy();
+    expect(options[4].selected).toBeFalsy();
+
+// Asset
+
+expect(screen.getAllByRole("listitem")).toEqual([list[1]]);
+expect(screen.queryByText("product1")).not.toBeInTheDocument();
+expect(screen.getByText("product2")).toBeInTheDocument()
+expect(screen.queryByText("product3")).not.toBeInTheDocument()
+
+
+  });
 })

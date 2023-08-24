@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import Register from "./index";
 import { BrowserRouter } from "react-router-dom";
 import { ERROR_MESSAGE } from "../../constants";
+import  {utils} from '../helper';
 
 const getElement=(element)=>{
   const elements={
@@ -30,7 +31,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }));
 
-describe.skip("Register page", () => {
+describe("Register page", () => {
   beforeEach(() => {
     render(
     <BrowserRouter>
@@ -64,6 +65,14 @@ describe.skip("Register page", () => {
   });
   test("button should be disabled when all inputs are empty", () => {
     expect(getElement("Button")).toHaveClass('btn');
+
+    //spay on example
+    const isEmpty = jest.spyOn(utils, 'isEmpty');
+    utils.isEmpty(getElement("Email").value)
+    utils.isEmpty(getElement("Password").value)
+    utils.isEmpty(getElement("Confirm Password").value)
+    expect(isEmpty).toHaveBeenCalledTimes(3);
+   
     expect(getElement("Button")).toBeDisabled()
   });
   test("button should be enabled when all inputs are filled", () => {

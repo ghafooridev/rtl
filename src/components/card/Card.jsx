@@ -15,9 +15,7 @@ function Card(props) {
       <h6>{title}</h6>
       <p className="price">${price}</p>
       <p className="description">{description}</p>
-      <div className="count">
-        <span>{rating.rate} &#9650;</span>
-      </div>
+      <div className="rate">{rating.rate} &#9650;</div>
 
       <button className={selected ? "selected" : ""} onClick={onAdd}>
         {selected ? "selected" : "Add to Cart"}

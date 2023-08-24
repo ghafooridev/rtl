@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import { ERROR_MESSAGE } from "../../constants";
+import { utils } from "../helper";
 
 function Register() {
   const navigate = useNavigate();
@@ -72,9 +73,9 @@ function Register() {
           className="btn"
           onClick={onClickSubmit}
           disabled={
-            registerInput.email === "" ||
-            registerInput.password === "" ||
-            registerInput.confirmPassword === ""
+            utils.isEmpty(registerInput.email) ||
+            utils.isEmpty(registerInput.password) ||
+            utils.isEmpty(registerInput.confirmPassword)
           }
         >
           Submit
